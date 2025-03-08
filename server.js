@@ -5,11 +5,12 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const exphbs = require('express-handlebars');
+var path = require('path');
 const {ensureAuthenticated} = require('./middleware/authMiddleware');
 require('./config/passport')(passport);
+const connectDB = require("./config/db");
 const authRoute = require('./routes/auth');
 const dashboardRoute = require('./routes/index')
-
 const app = express();
 
 // Middleware
@@ -39,6 +40,7 @@ app.use((req, res, next) => {
 });
 
 // View Engine
+app.use(express.static(path.join(__dirname, 'public')));
 app.engine('hbs', exphbs.engine({ defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', 'hbs');
 
@@ -50,9 +52,7 @@ app.use('/dashboard',ensureAuthenticated,dashboardRoute );
 app.use('/auth', authRoute);
 
 // MongoDB Connection
-mongoose.connect('mongodb://127.0.0.1:27017/authDB', { })
-    .then(() => console.log('MongoDB Connected'))
-    .catch(err => console.log(err));
+connectDB();
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
