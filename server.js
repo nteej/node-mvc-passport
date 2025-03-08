@@ -5,6 +5,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const methodOverride = require('method-override');
 const exphbs = require('express-handlebars');
+const {ensureAuthenticated} = require('./middleware/authMiddleware');
 require('./config/passport')(passport);
 
 const app = express();
@@ -43,7 +44,7 @@ app.set('view engine', 'hbs');
 app.get("/", (req, res) => {
     res.render("index", { user: req.user });
   });
-app.use('/dashboard', require('./routes/index'));
+app.use('/dashboard',ensureAuthenticated, require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 
 // MongoDB Connection
