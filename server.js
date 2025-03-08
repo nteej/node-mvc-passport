@@ -7,6 +7,8 @@ const methodOverride = require('method-override');
 const exphbs = require('express-handlebars');
 const {ensureAuthenticated} = require('./middleware/authMiddleware');
 require('./config/passport')(passport);
+const authRoute = require('./routes/auth');
+const dashboardRoute = require('./routes/index')
 
 const app = express();
 
@@ -44,8 +46,8 @@ app.set('view engine', 'hbs');
 app.get("/", (req, res) => {
     res.render("index", { user: req.user });
   });
-app.use('/dashboard',ensureAuthenticated, require('./routes/index'));
-app.use('/auth', require('./routes/auth'));
+app.use('/dashboard',ensureAuthenticated,dashboardRoute );
+app.use('/auth', authRoute);
 
 // MongoDB Connection
 mongoose.connect('mongodb://127.0.0.1:27017/authDB', { })
