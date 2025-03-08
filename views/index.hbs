@@ -1,0 +1,9 @@
+<h1>Welcome to Node.js Passport Integration in MVC</h1>
+{{#if user}}
+<p>Hello, <strong>{{user.username}}</strong>! 🎉</p>
+<a href="auth/welcome">Go to Dashboard</a>
+<a href="auth/logout" class="logout">Logout</a>
+{{else}}
+<p>Please log in to access your account.</p>
+<a href="auth/login">Login</a>
+{{/if}}
